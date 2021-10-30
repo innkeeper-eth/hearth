@@ -19,11 +19,6 @@ export default function Index({ youtube, preview }) {
           the <a href="#">innkeeper</a>
         </h1>
 
-        {/* <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p> */}
-
         <div className={styles.grid}>
           <a href="#" className={styles.card}>
             <h2>roadmap &rarr;</h2>
@@ -56,9 +51,8 @@ export default function Index({ youtube, preview }) {
           rel="noopener noreferrer"
         >
           Powered by // {' '}
-          {/* <span className={styles.logo}> */}
           <span>
-            Aragon DAO, Decentraland, ETH{/* <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} /> */}
+            Aragon DAO, Decentraland, ETH
           </span>
         </a>
       </footer>
