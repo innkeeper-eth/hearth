@@ -1,9 +1,11 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.scss'
 
-export default function Home() {
+
+
+export default function Index({ youtube, preview }) {
   return (
+
     <div className={styles.container}>
 
       <Head>
@@ -13,13 +15,6 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <div className='hero-image'>
-          <Image height="150px" width="150px" src="/logo_night.svg" />
-        </div>
-
-        <br />
-        <br />
-
         <h1 className={styles.title}>
           the <a href="#">innkeeper</a>
         </h1>
@@ -69,4 +64,12 @@ export default function Home() {
       </footer>
     </div>
   )
+}
+
+export async function getStaticProps({ preview = false }) {
+  let youtube = {};
+
+  return {
+    props: { youtube }, // will be passed to the page component as props
+  };
 }
