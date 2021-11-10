@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "next start",
-    "lint": "next lint",
     "dev": "next dev",
-    "build": "next build && next export -o docs",
-    "deploy": "yarn build && echo innkeeper.link > docs/CNAME && git add -A && git commit -m 'update' && git push"
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^1.6.10",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "framer-motion": "^4",
     "next": "12.0.1",
     "next-optimized-images": "^2.6.2",
     "react": "17.0.2",
