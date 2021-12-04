@@ -1,51 +1,113 @@
-import { Button, Container, Flex, Image, Link, Spacer, Text } from '@chakra-ui/react'
-
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Image,
+  Link,
+  Spacer,
+  Text,
+} from "@chakra-ui/react";
+import Badge from '../components/Badge';
+import styled from '@emotion/styled'
+import Head from 'next/head';
 
 const StyledButton = ({ text, href }) => (
-  <Link href={href}>
-    <Button fontSize='1.25em' colorScheme='teal'>
+  <Link href={href} display={{ base: 'none', lg: 'initial' }}>
+    <Button fontSize="1.25em" colorScheme="teal" p={7} >
       <a>{text}</a>
     </Button>
   </Link>
+);
+
+const StyledNav = styled(Flex)`
+  flex-direction: row;
+  align-items: center;
+
+  > * {
+    padding: 1em;
+  }
+`
+
+const Nav = () => (
+  <StyledNav p={10} justifyContent={{ base: 'center', lg: 'flex-end' }}>
+    <span>hi</span>
+    <span>hi</span>
+    <StyledButton text='Jump into the Inn' />
+
+  </StyledNav>
 )
 
-const StyledVideo = ({ videoPath }) => (
-  <video
-    style={{
-      objectFit: 'cover',
-      width: '100%',
-      height: '100%',
-      position: 'fixed',
-      zIndex: 0,
-      opacity: .2
-    }}
-    autoPlay muted loop>
-    <source src={videoPath} type="video/mp4" />
-  </video>
-)
+// const StyledVideo = ({ videoPath }) => (
+//   <video
+//     style={{
+//       objectFit: "cover",
+//       width: "100%",
+//       height: "100%",
+//       position: "fixed",
+//       zIndex: 0,
+//       opacity: 0.2,
+//     }}
+//     autoPlay
+//     muted
+//     loop
+//   >
+//     <source src={videoPath} type="video/mp4" />
+//   </video>
+// );
 
+const StyledDivider = styled(Flex)`
+  background: rgb(176,104,5);
+  background: linear-gradient(0deg, rgba(100,58,0,1) 0%, rgba(176,104,5,1) 100%);  
+  height: 25px;
+`
+
+const StyledHero = styled(Flex)`
+  flex-direction: column;
+  min-height: 40vh;
+  background-color: #511300;
+`
 
 function HomePage() {
   return (
     <>
-      <StyledVideo videoPath='/theinn.mp4' />
-      <Container backgroundColor={'#1A000'}>
-        <Flex justifyContent="center" alignItems="center" flexDirection="column" paddingTop="2em" height='90vh'>
-          <Image alt='logo' src="/logo_night.svg" size="cover" maxH="250px" />
-          {/* <Spacer /> */}
-          <h1><strong>innkeeper.eth</strong></h1>
-          <Text fontSize='1.15em' textAlign={['center']}>
-            Host live events in the metaverse. <br /> Curating a community of artists and metaverse enthusiasts.
-        </Text>
+      <StyledHero>
+        <Nav />
+        <Flex
+          flexDirection={{ base: 'column', lg: 'row' }}
+          p={5}
+          margin='0 auto'
+          alignItems='center'
+          textAlign={{ base: 'center', lg: 'inherit' }}
+          justifyContent='space-evenly'
+        >
+          <Badge />
+          <Box ml={{ base: '0px', lg: '5em' }}>
+            <Heading as="h2" size='2xl'>
+              Welcome to the Inn
+            </Heading>
+            <Text fontSize='1.5em'>
+              A community of artists and metaverse <br /> enthusiasts hosting weekly live events.
+            </Text>
+          </Box>
+
         </Flex>
-        <Flex justifyContent='space-between' height='10vh'>
-          <StyledButton text={'Discord'} href={'https://discord.gg/W3ZDAvys6P'} />
-          <StyledButton text={'The Inn'} href={'https://play.decentraland.org/?NETWORK=mainnet&position=137,-3'} />
-          <StyledButton text={'Twitter'} href={'https://twitter.com/innkeeperdoteth'} />
+      </StyledHero>
+      <StyledDivider />
+      <Flex flexDirection='column'>
+        <Heading as='h1' size='2xl' margin='0 auto' pt='1em'>
+          Upcoming Events
+        </Heading>
+        <Flex>
+          <Box color="#000" backgroundColor='#fff'>
+            hi
+          </Box>
         </Flex>
 
-      </Container>
-    </>)
+      </Flex>
+    </>
+  );
 }
 
-export default HomePage
+export default HomePage;
