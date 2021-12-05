@@ -7,6 +7,7 @@ const colors = {
 };
 
 const theme = extendTheme({
+    colors: { ...colors },
     styles: {
         global: {
             "html, body": {
@@ -15,12 +16,9 @@ const theme = extendTheme({
                 lineHeight: "tall",
                 fontFamily: "Montserrat Alternates, sans-serif",
             },
-            a: {
-                color: colors.highlight,
-            },
             h1: {
                 fontSize: "3.5rem",
-            },
+            }
         },
     },
 });
