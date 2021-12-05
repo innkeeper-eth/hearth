@@ -32,12 +32,13 @@ const StyledIcon = styled.span`
     font-size: 45px;
     cursor: pointer;
     padding: 0 0.25em;
+    transition: all 0.5s ease-in-out;
 
     & :active {
         transform: translate3d(0, 0, 1px);
         transition: all 0.25s ease-in-out;
     }
-    & :hover {
+    :hover {
         transform: translate3d(-4px, -4px, 1px);
         filter: drop-shadow(4px 4px 1px #000);
         transition: all 0.25s ease-in-out;
