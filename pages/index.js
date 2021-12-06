@@ -89,7 +89,7 @@ export async function getServerSideProps() {
   const airtable = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Events%20Page?api_key=keyppY0G5BP9W5rH8`;
   const response = await fetch(airtable);
   const { data } = response;
-  const artistsUrl = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Artists?maxRecords=3&view=Grid%20view`;
+  const artistsUrl = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Artists?maxRecords=10&view=Grid%20view`;
   const artistResponse = await fetch(artistsUrl, {
     headers: { authorization: 'Bearer keyppY0G5BP9W5rH8' }
   });
