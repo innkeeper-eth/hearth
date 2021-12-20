@@ -11,6 +11,7 @@ import Badge from './Badge';
 import styled from '@emotion/styled';
 import { useTheme } from '@chakra-ui/react';
 import { FaDiscord, FaEthereum, FaTwitter } from 'react-icons/fa'
+import { FcMusic } from 'react-icons/fc'
 
 const StyledButton = ({ text, href }) => {
     const { colors } = useTheme();
@@ -61,6 +62,8 @@ const Nav = () => {
             href={'https://twitter.com/innkeeperdoteth'} icon={<FaTwitter/>}/>
         <IconContainer
             href={'https://opensea.io/collection/loot-innkeeper-eth'} icon={<FaEthereum/>}/>
+        <IconContainer
+            href={'https://opensea.io/collection/melodies-innkeeper-eth'} icon={<FcMusic/>}/>
         <StyledButton
             href='https://play.decentraland.org/?position=137,-3?realm=dg'
             text='Jump into the Inn' />

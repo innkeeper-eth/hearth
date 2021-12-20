@@ -5,6 +5,7 @@ import {
     Grid,
     Heading,
     Text,
+    Tag
 } from "@chakra-ui/react";
 import styled from '@emotion/styled';
 import { FaPaintBrush } from 'react-icons/fa';
@@ -31,6 +32,16 @@ const StyledCard = styled(Flex)`
   }
 `;
 
+const ArtistTag = styled(Tag)`
+transition: all 0.25s ease-in-out;
+   :hover {
+      transition: all 0.25s ease-in-out;
+      color: white;
+      background-color: black;
+      font-weight: 700;
+  }
+`;
+
 const EventCard = ({ record }) => {
     const { eventStart, title, memo } = record.fields;
 
@@ -52,13 +63,15 @@ const EventCard = ({ record }) => {
         >
             <Heading as='h3' size="lg">{title}</Heading>
             <Flex pt={3} alignItems="center">
-                <FaPaintBrush/>
+                <FaPaintBrush />
                 {artists.map(artist => (
-                    <Text mx={2}>
-                        <a href={artist.url}>
-                        {artist.name}
-                        </a>
-                    </Text>
+                    <a href={artist.url} target="_blank">
+                        <ArtistTag mx={2}>
+                            <Text m={2}>
+                                {artist.name}
+                            </Text>
+                        </ArtistTag>
+                    </a>
                 ))}
             </Flex>
             <Text py={3}>
@@ -79,12 +92,18 @@ function Events({ records }) {
                 <Heading as='h1' size='2xl' margin='0 auto' pt='1em' fontFamily='Zen Antique, serif' color={'#F7B05B'}>
                     Upcoming Events
                 </Heading>
-                <Flex margin='1em auto' flexDirection={{ base: 'column', md: 'row' }}>
+                <Grid margin='1em auto' gridTemplateColumns={{ base: '1fr', md: '1fr 1fr' }}>
 
                     {records.map((record, key) => (
                         <EventCard key={key} record={record} />
                     ))}
-                </Flex>
+                </Grid>
+                {/* <Flex margin='1em auto' flexDirection={{ base: 'column', md: 'row' }}>
+
+                    {records.map((record, key) => (
+                        <EventCard key={key} record={record} />
+                    ))}
+                </Flex> */}
             </Flex>
         </>
     );
