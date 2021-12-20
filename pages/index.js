@@ -5,11 +5,9 @@ import Inn from '../components/Inn';
 import { Flex } from '@chakra-ui/react';
 import getArtist from '../lib/airtable';
 import refactorData from '../lib/airtable';
-import { mockData } from '../lib/mock';
 
 
 function HomePage({ data }) {
-  console.log({ data });
   return (
     <>
       <Hero />
@@ -22,26 +20,24 @@ function HomePage({ data }) {
 }
 
 export async function getServerSideProps() {
-  // const airtable = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Events%20Page?api_key=keyppY0G5BP9W5rH8`;
-  // const response = await fetch(airtable);
-  // const { data } = response;
-  // const artistsUrl = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Artists?maxRecords=10&view=Grid%20view`;
-  // const artistResponse = await fetch(artistsUrl, {
-  //   headers: { authorization: 'Bearer keyppY0G5BP9W5rH8' }
-  // });
+  const airtable = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Events%20Page?api_key=keyppY0G5BP9W5rH8`;
+  const response = await fetch(airtable);
+  const { data } = response;
+  const artistsUrl = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Artists?maxRecords=10&view=Grid%20view`;
+  const artistResponse = await fetch(artistsUrl, {
+    headers: { authorization: 'Bearer keyppY0G5BP9W5rH8' }
+  });
 
-  // data.artists = artistResponse.data.records;
+  data.artists = artistResponse.data.records;
 
 
-  // const { records, artists } = data;
+  const { records, artists } = data;
 
-  // data.combined = refactorData(records, artists);
-  // data.combined.sort((a, b) => {
-  //   return Date.parse(a.fields.eventStart) - Date.parse(b.fields.eventStart);
-  // });
-  // data.combined = data.combined;
-
-  const data = mockData;
+  data.combined = refactorData(records, artists);
+  data.combined.sort((a, b) => {
+    return Date.parse(a.fields.eventStart) - Date.parse(b.fields.eventStart);
+  });
+  data.combined = data.combined;
 
   data.combined = data.combined.filter(event => {
     const unixToday = Date.parse(new Date());
