@@ -30,7 +30,6 @@ export async function getServerSideProps() {
 
   data.artists = artistResponse.data.records;
 
-
   const { records, artists } = data;
 
   data.combined = refactorData(records, artists);

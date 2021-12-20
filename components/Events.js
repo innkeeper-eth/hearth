@@ -33,12 +33,12 @@ const StyledCard = styled(Flex)`
 `;
 
 const ArtistTag = styled(Tag)`
+font-weight: 700;
 transition: all 0.25s ease-in-out;
    :hover {
       transition: all 0.25s ease-in-out;
       color: white;
       background-color: black;
-      font-weight: 700;
   }
 `;
 
@@ -62,17 +62,19 @@ const EventCard = ({ record }) => {
             w={{ base: '90vw', md: '45vw', lg: '400px' }}
         >
             <Heading as='h3' size="lg">{title}</Heading>
-            <Flex pt={3} alignItems="center">
+            <Flex alignItems='center'>
                 <FaPaintBrush />
-                {artists.map(artist => (
-                    <a href={artist.url} target="_blank">
-                        <ArtistTag mx={2}>
-                            <Text m={2}>
-                                {artist.name}
-                            </Text>
-                        </ArtistTag>
-                    </a>
-                ))}
+                <Grid pt={3} gridGap={1} gridTemplateColumns='1fr 1fr'>
+                    {artists.map((artist, key) => (
+                        <a href={artist.url} target="_blank" key={key}>
+                            <ArtistTag mx={2}>
+                                <Text fontFamily='Montserrat, sans-serif' textTransform='uppercase' m={2}>
+                                    {artist.name}
+                                </Text>
+                            </ArtistTag>
+                        </a>
+                    ))}
+                </Grid>
             </Flex>
             <Text py={3}>
                 {memo}
