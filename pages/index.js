@@ -1,51 +1,55 @@
-import { Button, Container, Flex, Image, Link, Spacer, Text } from '@chakra-ui/react'
+import Hero from '../components/Hero';
+import Events from '../components/Events';
+import fetch from 'axios';
+import Inn from '../components/Inn';
+import { Flex } from '@chakra-ui/react';
+import getArtist from '../lib/airtable';
+import refactorData from '../lib/airtable';
 
 
-const StyledButton = ({ text, href }) => (
-  <Link href={href}>
-    <Button fontSize='1.25em' colorScheme='teal'>
-      <a>{text}</a>
-    </Button>
-  </Link>
-)
-
-const StyledVideo = ({ videoPath }) => (
-  <video
-    style={{
-      objectFit: 'cover',
-      width: '100%',
-      height: '100%',
-      position: 'fixed',
-      zIndex: 0,
-      opacity: .2
-    }}
-    autoPlay muted loop>
-    <source src={videoPath} type="video/mp4" />
-  </video>
-)
-
-
-function HomePage() {
+function HomePage({ data }) {
   return (
     <>
-      <StyledVideo videoPath='/theinn.mp4' />
-      <Container backgroundColor={'#1A000'}>
-        <Flex justifyContent="center" alignItems="center" flexDirection="column" paddingTop="2em" height='90vh'>
-          <Image alt='logo' src="/logo_night.svg" size="cover" maxH="250px" />
-          {/* <Spacer /> */}
-          <h1><strong>innkeeper.eth</strong></h1>
-          <Text fontSize='1.15em' textAlign={['center']}>
-            Host live events in the metaverse. <br /> Curating a community of artists and metaverse enthusiasts.
-        </Text>
-        </Flex>
-        <Flex justifyContent='space-between' height='10vh'>
-          <StyledButton text={'Discord'} href={'https://discord.gg/W3ZDAvys6P'} />
-          <StyledButton text={'The Inn'} href={'https://play.decentraland.org/?NETWORK=mainnet&position=137,-3'} />
-          <StyledButton text={'Twitter'} href={'https://twitter.com/innkeeperdoteth'} />
-        </Flex>
-
-      </Container>
-    </>)
+      <Hero />
+      <Events records={data.combined} />
+      <Flex justifyContent='center'>
+        <Inn />
+      </Flex>
+    </>
+  );
 }
 
-export default HomePage
+export async function getServerSideProps() {
+  const airtable = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Events%20Page?api_key=keyppY0G5BP9W5rH8`;
+  const response = await fetch(airtable);
+  const { data } = response;
+  const artistsUrl = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Artists?maxRecords=10&view=Grid%20view`;
+  const artistResponse = await fetch(artistsUrl, {
+    headers: { authorization: 'Bearer keyppY0G5BP9W5rH8' }
+  });
+
+  data.artists = artistResponse.data.records;
+
+  const { records, artists } = data;
+
+  data.combined = refactorData(records, artists);
+  data.combined.sort((a, b) => {
+    return Date.parse(a.fields.eventStart) - Date.parse(b.fields.eventStart);
+  });
+  data.combined = data.combined;
+
+  data.combined = data.combined.filter(event => {
+    const unixToday = Date.parse(new Date());
+    const unixEvent = Date.parse(event.fields.eventStart);
+    return unixToday < unixEvent;
+  });
+
+
+  return {
+    props: { data },
+  };
+}
+
+export default HomePage;
+
+
