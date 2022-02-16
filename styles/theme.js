@@ -14,10 +14,10 @@ const theme = extendTheme({
                 color: colors.light,
                 backgroundColor: colors.dark,
                 lineHeight: "tall",
-                fontFamily: "Montserrat Alternates, sans-serif",
+                fontFamily: 'Zen Maru Gothic, sans-serif'
             },
             h1: {
-                fontSize: "3.5rem",
+                fontFamily: 'Irish Grover, cursive'
             }
         },
     },
