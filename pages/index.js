@@ -53,12 +53,14 @@ const Card = ({ header, desc, date, artists }) => {
         gridTemplateColumns={{ base: '1fr', md: '8fr 3fr 1fr 1fr' }}
         borderRadius={{ base: '20px', md: 'initial' }}
       >
-        <Box
+        <Flex
           minH={{ base: 'initial', md: '147px' }}
           p={3}
           bgColor={'#E8D3B6'}
           m={3}
           borderRadius={'20px 0 0 20px'}
+          justifyContent="space-between"
+          flexDirection="column"
         >
           <Heading
             color={'dark'}
@@ -68,7 +70,7 @@ const Card = ({ header, desc, date, artists }) => {
             {header}
           </Heading>
           <Text>{desc}</Text>
-        </Box>
+        </Flex>
         {!isMobile && (
           <Flex
             my={3}
@@ -101,33 +103,6 @@ const Card = ({ header, desc, date, artists }) => {
               </Text>
             </Box>
           ))}
-          {/* <Box>
-            <Text
-              fontFamily="Montserrat"
-              fontSize="1.15rem"
-              fontWeight="700"
-              textTransform="uppercase"
-              sx={{ 'writing-mode': !isMobile && 'vertical-rl' }}
-            >
-              <Link href="#">
-                <a>Vector Meldrew</a>
-              </Link>
-            </Text>
-          </Box>
-          <Box>
-            <Text
-              fontFamily="Montserrat"
-              fontSize="1.15rem"
-              fontWeight="700"
-              textTransform="uppercase"
-              sx={{ 'writing-mode': !isMobile && 'vertical-rl' }}
-              textDecoration={'underline'}
-            >
-              <Link href="#">
-                <a>Pipaluk</a>
-              </Link>
-            </Text>
-          </Box> */}
         </Flex>
         <Flex
           flexDirection={{ base: 'row', md: 'column' }}
@@ -160,12 +135,11 @@ const Card = ({ header, desc, date, artists }) => {
             mx={3}
             alignItems={'center'}
             justifyContent={'center'}
-            // bgColor={'#E8D3B6'}
             alignSelf={{ base: 'center', md: 'end' }}
             cursor={'pointer'}
           >
-            <Tooltip label="Unlockable NFTs">
-              <Text bgColor="#E8D3B6" p={3} borderRadius={'50px'}>
+            <Tooltip label="Event Airdrops a Melody">
+              <Text bgColor="highlight" p={3} borderRadius={'50px'}>
                 <a>
                   <FaParachuteBox />
                 </a>
