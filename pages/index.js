@@ -14,7 +14,6 @@ function HomePage({ data }) {
       <Flex justifyContent='center'>
         <Inn />
       </Flex>
-
     </>
   );
 }
@@ -23,7 +22,7 @@ export async function getServerSideProps() {
   const airtable = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Events%20Page?api_key=keyppY0G5BP9W5rH8`;
   const response = await fetch(airtable);
   const { data } = response;
-  const artistsUrl = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Artists?maxRecords=20&view=Grid%20view`;
+  const artistsUrl = `https://api.airtable.com/v0/appwUCl22CLGExUBy/Artists?maxRecords=40&view=Grid%20view`;
   const artistResponse = await fetch(artistsUrl, {
     headers: { authorization: 'Bearer keyppY0G5BP9W5rH8' },
   });
