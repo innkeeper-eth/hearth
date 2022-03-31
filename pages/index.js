@@ -12,20 +12,39 @@ import Link from 'next/link'
 import { mockData } from '../lib/mock'
 import { FaParachuteBox } from 'react-icons/fa'
 import styled from '@emotion/styled'
+import fetch from 'axios'
+import { Coda } from 'coda-js'
+import getEvents from '../lib/coda'
 
 const HomePage = ({ data }) => {
-  console.log({ data })
+  console.log('coda', data.coda)
+  const { coda } = data
   return (
     <>
       <Wrapper>
         <Flex flexDirection="column">
-          {data.combined.map((event) => (
-            <Card
-              header={event.fields.title}
-              desc={event.fields.memo}
-              artists={event.fields.artists}
-            />
-          ))}
+          {coda.map((event, index) => {
+            const {
+              Artists: artistsString,
+              eventDescription: description,
+              eventName: name,
+              eventStart: start,
+            } = event.values
+            const artists = artistsString.split(',')
+            if (Date.parse(start) < new Date()) {
+              return
+            } else {
+              return (
+                <Card
+                  key={index}
+                  header={name}
+                  desc={description}
+                  artists={artists}
+                  date={start}
+                />
+              )
+            }
+          })}
         </Flex>
       </Wrapper>
     </>
@@ -38,9 +57,19 @@ const Wrapper = ({ children }) => (
   </Box>
 )
 
-const Card = ({ header, desc, date, artists }) => {
+const Card = ({ header, desc, date: eventStart, artists }) => {
   const isMobile = useMediaQuery({
     query: '(max-width: 768px)',
+  })
+
+  const date = new Date(Date.parse(eventStart))
+  const month = date.toLocaleString('default', { month: 'short' })
+  const day = date.toLocaleString('default', { day: 'numeric' })
+  const dayName = date.toLocaleString('default', { weekday: 'short' })
+  const time = date.toLocaleTimeString('default', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
   })
 
   return (
@@ -88,8 +117,9 @@ const Card = ({ header, desc, date, artists }) => {
           alignItems="center"
           justifyContent="space-around"
         >
-          {artists.map((artist) => (
-            <Box>
+          {artists.map((artist, index) => (
+            <Box key={index}>
+              {console.log('artist', artist)}
               <Text
                 fontFamily="Montserrat"
                 fontSize="1.15rem"
@@ -97,8 +127,8 @@ const Card = ({ header, desc, date, artists }) => {
                 textTransform="uppercase"
                 sx={{ 'writing-mode': !isMobile && 'vertical-rl' }}
               >
-                <Link href={artist.url}>
-                  <a>{artist.name}</a>
+                <Link href={'#'}>
+                  <a>{artist}</a>
                 </Link>
               </Text>
             </Box>
@@ -125,7 +155,7 @@ const Card = ({ header, desc, date, artists }) => {
               fontWeight={'500'}
               textAlign={'center'}
             >
-              Feb 17
+              {`${month} ${day}`}
             </Heading>
           </Flex>
           <Flex
@@ -163,7 +193,7 @@ const Card = ({ header, desc, date, artists }) => {
               fontWeight={'500'}
               textAlign={'center'}
             >
-              21:00
+              {time}
             </Heading>
           </Flex>
         </Flex>
@@ -198,6 +228,8 @@ const StyledIcon = styled.span`
 
 export async function getServerSideProps() {
   const { data } = mockData
+  const rows = await getEvents()
+  data.coda = JSON.parse(JSON.stringify(rows))
 
   return {
     props: { data },
