@@ -104,10 +104,14 @@ const Card = ({ header, desc, date: eventStart, artists }) => {
           <Flex
             my={3}
             bgColor="#E8D3B6"
+            backgroundImage={'url("/egr.png")'}
+            backgroundSize={'cover'}
+            backgroundRepeat={'no-repeat'}
+            backgroundPosition={'center'}
             justifyContent="center"
             alignItems="center"
           >
-            <Image src="/egr.png" />
+            {/* <Image src="/egr.png" /> */}
           </Flex>
         )}
         <Flex
