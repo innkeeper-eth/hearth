@@ -79,11 +79,11 @@ const CardImg = ({ isMobile, artists }) => {
         <Flex
           my={3}
           bgColor="#E8D3B6"
-          backgroundImage={'url("/egr.png")'}
-          backgroundSize={'cover'}
+          backgroundImage={'url("/logo.svg")'}
+          backgroundSize={'100px'}
           backgroundRepeat={'no-repeat'}
-          backgroundPosition={'center'}
-          border={'4px red solid'}
+          backgroundPosition={'center center'}
+          border={'4px #f7b05b solid'}
           borderRadius={'20px'}
         />
       )}
@@ -93,9 +93,11 @@ const CardImg = ({ isMobile, artists }) => {
         m={3}
         alignItems="center"
         justifyContent="space-around"
+        borderRadius="10px"
+        flexDirection={{ base: 'column', lg: 'initial' }}
       >
         {artists.map((artist, index) => (
-          <Box key={index}>
+          <Box key={index} py={{ base: '0.5em', lg: 'initial' }}>
             <Text
               fontFamily="Montserrat"
               fontSize="1.15rem"
@@ -103,9 +105,7 @@ const CardImg = ({ isMobile, artists }) => {
               textTransform="uppercase"
               sx={{ 'writing-mode': !isMobile && 'vertical-rl' }}
             >
-              <Link href={'#'}>
-                <a>{artist}</a>
-              </Link>
+              {artist}
             </Text>
           </Box>
         ))}

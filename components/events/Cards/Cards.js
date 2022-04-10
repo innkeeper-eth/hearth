@@ -10,14 +10,20 @@ import {
 import Card from '../Card/Card'
 
 const Cards = ({ coda }) => {
-  coda.sort((a, b) => {
+  const newCoda = coda.filter((event) => {
+    const { eventStart } = event.values
+    const start = Date.parse(new Date(eventStart))
+    return !isNaN(start) === true
+  })
+  newCoda.sort((a, b) => {
     const dateA = new Date(a.values.eventStart)
     const dateB = new Date(b.values.eventStart)
+
     return dateA - dateB
   })
   return (
     <Flex flexDirection="column">
-      {coda.map((event, index) => {
+      {newCoda.map((event, index) => {
         const {
           Artists: artistsString,
           eventDescription: description,
@@ -26,8 +32,9 @@ const Cards = ({ coda }) => {
         } = event.values
 
         const artists = artistsString.split(',')
+        const startDate = Date.parse(start)
 
-        if (Date.parse(start) < new Date('2022-3-10')) {
+        if (startDate < new Date() || isNaN(startDate)) {
           return
         } else {
           return (
