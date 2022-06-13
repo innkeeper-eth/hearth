@@ -62,7 +62,6 @@ const getSum = ({ records }) => {
 }
 
 const getUniqueAddresses = ({ records }) => {
-  console.log('aaaa', records)
   const addresses = records?.map((record) => record.from)
   const uniqueNames = Array.from(new Set(addresses))
   return uniqueNames
@@ -73,7 +72,6 @@ const groupByAddress = ({ records, uniques }) => {
     address,
     txs: [],
   }))
-  console.log({ newArray })
 
   records.forEach((record) => {
     newArray.find(
@@ -85,8 +83,6 @@ const groupByAddress = ({ records, uniques }) => {
 }
 
 const TipsPage = ({ data }) => {
-  console.log('top of page', { data })
-
   const [selected, selectTab] = useState('matic')
 
   const today = +new Date()
@@ -103,7 +99,6 @@ const TipsPage = ({ data }) => {
     records: filteredMatic,
     uniques: uniqueMatic,
   })
-  console.log({ groupedMatic })
 
   const tabs = {
     matic: filteredMatic,
@@ -180,7 +175,6 @@ const SummaryBox = ({ children, color, onClick }) => {
 export async function getServerSideProps() {
   const data = {}
   const recs = await getTxs(50)
-  console.log({ recs })
   data.matic = JSON.parse(JSON.stringify(recs.data.matic))
   data.mana = JSON.parse(JSON.stringify(recs.data.mana))
   data.weth = JSON.parse(JSON.stringify(recs.data.weth))

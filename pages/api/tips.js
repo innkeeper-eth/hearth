@@ -2,7 +2,7 @@ import fetch from 'axios'
 
 export default async (req, res) => {
   const { pagesize } = req.query
-  console.log({ pagesize })
+
   const brewsAddress = '0x5a73ae921049343337530cf746de8950c3f9a099'
   const key = 'XCZQR3R8HZ389K9JCVI27I3GWVXQKKDECV'
   const contracts = {
