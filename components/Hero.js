@@ -1,4 +1,13 @@
-import { Box, Button, Flex, Heading, Link, Text, Icon } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Link,
+  Text,
+  Icon,
+  Image,
+} from '@chakra-ui/react'
 import Badge from './Badge'
 import styled from '@emotion/styled'
 import { useTheme } from '@chakra-ui/react'
@@ -53,28 +62,44 @@ const IconContainer = ({ icon, href }) => (
   </StyledIcon>
 )
 
-const Nav = () => {
+export const Nav = ({ irl }) => {
   return (
-    <StyledNav justifyContent={{ base: 'center', lg: 'flex-end' }}>
-      <IconContainer
-        href={'https://discord.gg/SjzF2AvPkT'}
-        icon={<FaDiscord />}
-      />
-      <IconContainer
-        href={'https://twitter.com/innkeeperdoteth'}
-        icon={<FaTwitter />}
-      />
-      {/* <IconContainer
+    <>
+      <Flex justifyContent={'space-between'} bg={irl && 'black'}>
+        {irl && (
+          <Box bg="#000" p={'2em'}>
+            <Link href="/">
+              <a>
+                <Image src={'/logo_night.svg'} h={'75px'} />
+              </a>
+            </Link>
+          </Box>
+        )}
+        <StyledNav
+          justifyContent={{ base: 'center', lg: 'flex-end' }}
+          width={!irl && '100%'}
+        >
+          <IconContainer
+            href={'https://discord.gg/SjzF2AvPkT'}
+            icon={<FaDiscord />}
+          />
+          <IconContainer
+            href={'https://twitter.com/innkeeperdoteth'}
+            icon={<FaTwitter />}
+          />
+          {/* <IconContainer
             href={'https://opensea.io/collection/loot-innkeeper-eth'} icon={<FaEthereum/>}/> */}
-      <IconContainer
-        href={'https://opensea.io/collection/melodies-innkeeper-eth'}
-        icon={<FcMusic />}
-      />
-      <StyledButton
-        href="https://play.decentraland.org/?position=137,-3?realm=dg"
-        text="Jump into the Inn"
-      />
-    </StyledNav>
+          <IconContainer
+            href={'https://opensea.io/collection/melodies-innkeeper-eth'}
+            icon={<FcMusic />}
+          />
+          <StyledButton
+            href="https://play.decentraland.org/?position=137,-3?realm=dg"
+            text="Jump into the Inn"
+          />
+        </StyledNav>
+      </Flex>
+    </>
   )
 }
 
