@@ -1,88 +1,26 @@
-import { Box, Center, Flex, Text, Input } from '@chakra-ui/react'
+import {
+  Box,
+  Center,
+  Flex,
+  Grid,
+  Text,
+  Input,
+  Image,
+  useDisclosure,
+} from '@chakra-ui/react'
+import {
+  filterRecords,
+  getSum,
+  getUniqueAddresses,
+  groupByAddress,
+} from '../components/tips/helpers'
+import Record from '../components/tips/Record'
+import TipsModal from '../components/tips/TipsModal'
 import { useState } from 'react'
-import fetch from 'axios'
 import getTxs from '../lib/polygon'
 
-const contracts = [
-  { cur: 'MANA', addy: '0xA1c57f48F0Deb89f569dFbE6E2B7f46D33606fD4' },
-  { cur: 'ETH', addy: '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619' },
-]
-
-const Record = ({ record }) => {
-  const { contractAddress, from, timeStamp, value, hash } = record
-
-  const multiplyDate = new Date(timeStamp * 1000)
-  const newDate = multiplyDate.toLocaleDateString()
-  const one = 1000000000000000000
-
-  const currency = contracts.find(
-    (cur) => contractAddress.toUpperCase() === cur.addy.toUpperCase()
-  )
-  return (
-    <>
-      <Flex
-        bg={'white'}
-        width={'100%'}
-        color={'black'}
-        p={3}
-        m={1}
-        flexDirection={'column'}
-      >
-        <Text>
-          {value / one} {currency ? currency.cur : 'MATIC'}
-        </Text>
-        <Text>{from}</Text>
-        <Text fontWeight="700" color={'#6495ED'}>
-          <a target={'_blank'} href={`https://polygonscan.com/tx/${hash}`}>
-            {newDate} {multiplyDate.getHours()}:{multiplyDate.getMinutes()}
-          </a>
-        </Text>
-      </Flex>
-    </>
-  )
-}
-
-const filterRecords = ({ records }) => {
-  const today = +new Date()
-  const oneDay = 86400 * 1000
-  const oneDayAgo = today - oneDay
-  return records
-    ?.filter((record) => record.timeStamp * 1000 >= oneDayAgo)
-    .sort((a, b) => b.timeStamp - a.timeStamp)
-}
-
-const getSum = ({ records }) => {
-  const one = 1000000000000000000
-  const values = records?.map((record) => record.value / one)
-  const sum = values?.reduce((a, b) => a + b, 0)
-
-  const rounded = Math.floor(sum * 100) / 100
-
-  return rounded
-}
-
-const getUniqueAddresses = ({ records }) => {
-  const addresses = records?.map((record) => record.from)
-  const uniqueNames = Array.from(new Set(addresses))
-  return uniqueNames
-}
-
-const groupByAddress = ({ records, uniques }) => {
-  const newArray = uniques.map((address) => ({
-    address,
-    txs: [],
-  }))
-
-  records.forEach((record) => {
-    newArray.find(
-      (addy) => addy.address === record.from && addy.txs.push(record)
-    )
-  })
-
-  return newArray
-}
-
-const TipsPage = ({ data }) => {
+const TipsPage = ({ data = {} }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const [selected, selectTab] = useState('matic')
 
   const today = +new Date()
@@ -93,12 +31,7 @@ const TipsPage = ({ data }) => {
   const filteredMatic = filterRecords({ records: data?.matic?.result })
   const filteredMana = filterRecords({ records: data?.mana?.result })
   const filteredWeth = filterRecords({ records: data?.weth?.result })
-
-  const uniqueMatic = getUniqueAddresses({ records: filteredMatic })
-  const groupedMatic = groupByAddress({
-    records: filteredMatic,
-    uniques: uniqueMatic,
-  })
+  // const filteredUsdc = filterRecords({ records: data?.usdc?.result })
 
   const tabs = {
     matic: filteredMatic,
@@ -108,67 +41,123 @@ const TipsPage = ({ data }) => {
 
   return (
     <>
+      <TipsModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
       <Flex p={5} flexDirection={'column'}>
-        <Flex alignItems={'center'} justifyContent={'center'}>
-          <Box mr={10}>
-            <Text>Showing records between</Text>
-          </Box>
-          <Box mr={10}>
-            <Text>
-              {new Date(oneDayAgo).toLocaleString()} and
-              <br />
-              {new Date().toLocaleString()}
+        <Flex
+          w={'100%'}
+          bg={'#BA5C12'}
+          color={'#FFB86F'}
+          p={3}
+          mb={3}
+          fontSize={'18px'}
+          borderRadius={'8px'}
+          justifyContent={'space-evenly'}
+          flexDirection={{ base: 'column', md: 'row' }}
+          alignItems={'center'}
+        >
+          <Box fontSize={'20px'}>
+            <Text
+              fontWeight={'700'}
+              fontFamily={'montserrat'}
+              onClick={() => onOpen()}
+              cursor={'pointer'}
+            >
+              brews.innkeeper.eth
             </Text>
           </Box>
-          <Box>
+          <Box fontFamily={'montserrat'}>
             <Text>
-              Artist will receive 95%:{' '}
-              {getSum({ records: filteredMatic }) * 0.95} MATIC,{' '}
-              {getSum({ records: filteredMana }) * 0.95} MANA,{' '}
-              {getSum({ records: filteredWeth }) * 0.95} WETH,{' '}
+              {new Date(oneDayAgo).toLocaleString()} (24hrs ago) to{' '}
+              {new Date().toLocaleString()} (now)
             </Text>
-            <Text>
-              The Inn takes a fee of 5%:{' '}
-              {getSum({ records: filteredMatic }) * 0.05} MATIC,{' '}
-              {getSum({ records: filteredMana }) * 0.05} MANA,{' '}
-              {getSum({ records: filteredWeth }) * 0.05} WETH,{' '}
-            </Text>
+            <Grid
+              gridTemplateColumns={'2fr 1fr 1fr 1fr'}
+              fontSize={'12px'}
+              fontWeight={700}
+            >
+              <Text>Artist's 95% cut: </Text>
+              <Text>
+                {(getSum({ records: filteredMatic }) * 0.95).toFixed(2)} MATIC
+              </Text>
+              <Text>
+                {(getSum({ records: filteredMana }) * 0.95).toFixed(2)} MANA{' '}
+              </Text>
+              <Text>
+                {(getSum({ records: filteredWeth }) * 0.95).toFixed(2)} WETH{' '}
+              </Text>
+              <Text opacity={0.6}>Innkeeper's 5% cut: </Text>
+              <Text opacity={0.6}>
+                {(getSum({ records: filteredMatic }) * 0.05).toFixed(2)} MATIC
+              </Text>
+              <Text opacity={0.6}>
+                {(getSum({ records: filteredMana }) * 0.05).toFixed(2)} MANA{' '}
+              </Text>
+              <Text opacity={0.6}>
+                {(getSum({ records: filteredWeth }) * 0.05).toFixed(2)} WETH{' '}
+              </Text>
+            </Grid>
           </Box>
         </Flex>
         <Flex justifyContent={'center'}>
-          <SummaryBox color={'green'} onClick={() => selectTab('matic')}>
-            Total Matic: {getSum({ records: filteredMatic })}
-          </SummaryBox>
-          <SummaryBox color={'cyan'} onClick={() => selectTab('mana')}>
-            Total Mana: {getSum({ records: filteredMana })}
-          </SummaryBox>
-          <SummaryBox color={'purple'} onClick={() => selectTab('weth')}>
-            Total ETH: {getSum({ records: filteredWeth })}
-          </SummaryBox>
+          <SummaryBox
+            color={'#573280'}
+            name={'matic'}
+            value={getSum({ records: filteredMatic })}
+            onClick={() => selectTab('matic')}
+          />
+          <SummaryBox
+            color={'#573280'}
+            name={'mana'}
+            value={getSum({ records: filteredMana })}
+            onClick={() => selectTab('mana')}
+          />
+          <SummaryBox
+            color={'#573280'}
+            name={'eth'}
+            value={getSum({ records: filteredWeth })}
+            onClick={() => selectTab('weth')}
+          />
+          {/* <SummaryBox
+            color={'#573280'}
+            name={'usdc'}
+            value={getSum({ records: filteredUsdc })}
+            onClick={() => selectTab('usdc')}
+          /> */}
         </Flex>
-        {tabs[selected].map((record, index) => {
-          return <Record record={record} key={index} />
-        })}
+        <Grid
+          pt={3}
+          gridGap={'8px'}
+          gridTemplateColumns={{
+            base: '1fr',
+            md: '1fr 1fr',
+            lg: '1fr 1fr 1fr',
+          }}
+        >
+          {tabs[selected].map((record, index) => {
+            return <Record record={record} key={index} />
+          })}
+        </Grid>
       </Flex>
     </>
   )
 }
 
-const SummaryBox = ({ children, color, onClick }) => {
+const SummaryBox = ({ color, onClick, value, name = '' }) => {
   return (
-    <Box
+    <Flex
       bg={color}
       color={'white'}
       p={3}
       m={1}
-      borderRadius={'10px'}
+      borderRadius={'4px'}
       onClick={onClick}
       cursor={'pointer'}
     >
+      <Image src={`coins/${name}.png`} w={'35px'} mr={5} />
       <Text fontWeight={'700'} fontSize={'1.25rem'}>
-        {children}
+        {value > 0 ? value : '0'} {name.toUpperCase()}
       </Text>
-    </Box>
+    </Flex>
   )
 }
 
@@ -178,6 +167,7 @@ export async function getServerSideProps() {
   data.matic = JSON.parse(JSON.stringify(recs.data.matic))
   data.mana = JSON.parse(JSON.stringify(recs.data.mana))
   data.weth = JSON.parse(JSON.stringify(recs.data.weth))
+  // data.usdc = JSON.parse(JSON.stringify(recs.data.usdc))
 
   return {
     props: { data },
