@@ -7,12 +7,6 @@ const HomePage = ({ data }) => {
   const { coda } = data
   return (
     <>
-      {/* <Link href="/irl">
-        <a>
-          <Banner />
-        </a>
-      </Link> */}
-
       <Hero />
       <Wrapper>
         <Cards coda={coda} />
